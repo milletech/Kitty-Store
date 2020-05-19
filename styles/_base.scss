@@ -1,0 +1,35 @@
+
+*::before,
+*::after,
+*{
+    padding:0;
+    margin: 0;
+    box-sizing: border-box;
+    
+}
+//Media Query Values
+
+$bigger:62.5em; //1000 px
+$big:56.65em;   //900px
+$medium:43.75em; //700px
+$medium-2:37.5em; //600px
+
+// Color Variebles
+$primary-color:rgba(0,0,0 ,0.37);
+$primary-color-dark:rgba(0,0,0,0);
+$secondary-color:#C4C4C4;
+$secondary-color-light:#A1A1A1;
+$Text-color:#555;
+
+html{
+    font-size:62.5%;
+    box-sizing: border-box;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight:600;
+    @media only screen  and (max-width:$bigger){
+        font-size: 54%;
+    }
+    @media only screen  and (max-width:$big){
+        font-size: 50%;
+    }
+}
