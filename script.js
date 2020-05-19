@@ -109,67 +109,82 @@ var dataController = (function() {
 
 })()
 
+// UI CONTROLLER MODULE
 var UIController = (function() {
     var DOMStrings = {
         cartBtn: ".navbar__cart-icon",
         cartSheet: ".checkout",
         cartAbort: ".abort",
-        addItem: "product-card__add"
+        addItem: "product-card__add",
+        cartDOM: ".cartItems",
+        counter: ".counter"
     }
+
     return {
         addItem: function(obj) {
             var html, newHtml;
+            counter = 0;
             html = '<div class="product-cart"><img src="%imagesrc%" alt="" class="cartImg"><div class="product-cart-desc"><h1>%productName%</h1><h1>%productPrice%</h1><i>Remove</i></div></div>';
             newHtml = html.replace("%imagesrc%", obj.proImage);
             newHtml = newHtml.replace("%productName%", obj.proName);
             newHtml = newHtml.replace("%productPrice%", obj.proPrice);
 
             //Insert the item to the cart DOM
-            document.querySelector(".cartItems").insertAdjacentHTML("beforeend", newHtml)
+            document.querySelector(DOMStrings.cartDOM).insertAdjacentHTML("beforeend", newHtml);
+
         },
+        /* updateUI: function() {
+             var counter = 0;
+             return counter += 1;
+         },*/
         getDOMStrings: function() {
             return DOMStrings;
         }
     }
-})()
+})();
 
 // CONTROLLER, THE CENTER OF EVERYTHING
-var controller = (function() {
+var controller = (function(UICtrl) {
+    var strings = UICtrl.getDOMStrings();
+    var addIcon = document.getElementsByClassName(strings.addItem);
+    var counter = 0;
+    for (x of addIcon) {
+        x.addEventListener("click", function() {
+            var ProductInfo = function(proName, proPrice, proImage, numPrice) {
+                this.proName = proName;
+                this.proPrice = proPrice;
+                this.proImage = proImage;
+                this.numPrice = numPrice;
+            };
+            var productName = this.parentElement.firstChild.nextElementSibling.firstChild.nextElementSibling.innerHTML;
+            var productPrice = (this.parentElement.firstChild.nextElementSibling.lastChild.previousElementSibling.innerHTML);
+            var newPrice = Number(productPrice.slice(1));
+            var productImage = this.parentElement.parentElement.firstChild.nextElementSibling.firstChild.nextElementSibling.src;
+            // DATA STRUCTURE
+            var data = {
+                products: [],
+                allPrices: []
+            };
+            // CREATE  NEW ITEM
+            var newItem = new ProductInfo(productName, productPrice, productImage, newPrice);
+            data.products.push(newItem);
+            data.allPrices.push(newItem.numPrice);
+            dataController.createItem();
+            // ADD TO CART
+            UICtrl.addItem(newItem);
+            // UPDATE UI
+            counter++;
+            document.querySelector(strings.counter).innerHTML = counter;
 
-})()
-var addIcon = document.getElementsByClassName("product-card__add");
-for (x of addIcon) {
-    x.addEventListener("click", function() {
-        var ProductInfo = function(proName, proPrice, proImage, numPrice) {
-            this.proName = proName;
-            this.proPrice = proPrice;
-            this.proImage = proImage;
-            this.numPrice = numPrice;
-        };
-        var productName = this.parentElement.firstChild.nextElementSibling.firstChild.nextElementSibling.innerHTML;
-        var productPrice = (this.parentElement.firstChild.nextElementSibling.lastChild.previousElementSibling.innerHTML);
-        var newPrice = Number(productPrice.slice(1));
-        var productImage = this.parentElement.parentElement.firstChild.nextElementSibling.firstChild.nextElementSibling.src;
-        //Create an item
-        var data = {
-            products: [],
-            allPrices: []
-        }
-        var newItem = new ProductInfo(productName, productPrice, productImage, newPrice);
-        data.products.push(newItem);
-        data.allPrices.push(newItem.numPrice);
-        dataController.createItem();
-        // Add to the cart 
-        UIController.addItem(newItem);
+
+        })
+    }
+    // OPEN CART
+    document.querySelector(strings.cartBtn).addEventListener("click", function() {
+        document.querySelector(strings.cartSheet).style.width = "20%";
+    });
+    // CLOSE CART
+    document.querySelector(strings.cartAbort).addEventListener("click", function() {
+        document.querySelector(strings.cartSheet).style.width = "0%";
     })
-}
-
-
-
-// Cart operations
-document.querySelector(".navbar__cart-icon").addEventListener("click", function() {
-    document.querySelector(".checkout").style.width = "20%";
-});
-document.querySelector(".abort").addEventListener("click", function() {
-    document.querySelector(".checkout").style.width = "0%";
-})
+})(UIController)
