@@ -117,7 +117,8 @@ var UIController = (function() {
         cartAbort: ".abort",
         addItem: "product-card__add",
         cartDOM: ".cartItems",
-        counter: ".counter"
+        counter: ".counter",
+        totalCost: ".total-cost"
     }
 
     return {
@@ -130,7 +131,7 @@ var UIController = (function() {
             newHtml = newHtml.replace("%productPrice%", obj.proPrice);
 
             //Insert the item to the cart DOM
-            document.querySelector(DOMStrings.cartDOM).insertAdjacentHTML("beforeend", newHtml);
+            document.querySelector(DOMStrings.cartDOM).insertAdjacentHTML("afterbegin", newHtml);
 
         },
         /* updateUI: function() {
@@ -148,6 +149,7 @@ var controller = (function(UICtrl) {
     var strings = UICtrl.getDOMStrings();
     var addIcon = document.getElementsByClassName(strings.addItem);
     var counter = 0;
+    var total = 0;
     for (x of addIcon) {
         x.addEventListener("click", function() {
             var ProductInfo = function(proName, proPrice, proImage, numPrice) {
@@ -175,6 +177,10 @@ var controller = (function(UICtrl) {
             // UPDATE UI
             counter++;
             document.querySelector(strings.counter).innerHTML = counter;
+            // UPDATE THE TOATAL COST OF THE ITEMS
+            total += parseFloat(data.allPrices);
+            document.querySelector(strings.totalCost).innerHTML = total;
+
 
 
         })

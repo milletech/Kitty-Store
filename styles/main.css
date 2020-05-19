@@ -730,7 +730,8 @@ html {
 .contact-us h2 {
   text-align: center;
   margin-bottom: .7rem;
-  font-size: 1.9rem;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .contact-us__input {
@@ -772,6 +773,10 @@ html {
   }
 }
 
+.checkout {
+  overflow-y: scroll;
+}
+
 .check-header {
   margin-bottom: 2rem;
 }
@@ -804,6 +809,7 @@ html {
 .product-cart-desc i {
   font-size: 1.5rem;
   color: red;
+  cursor: pointer;
 }
 
 .product-cart {
@@ -818,6 +824,26 @@ html {
 
 .counter i {
   font-size: 1.3rem;
+}
+
+.checkout-cost {
+  text-align: center;
+}
+
+.checkout-cost h3 {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.checkout-cost button {
+  cursor: pointer;
+  background-color: steelblue;
+  border: none;
+  color: #f4f4f4;
+  font-size: 2rem;
+  padding: 0.5rem 2rem;
+  border-radius: 2.2rem;
 }
 
 .u-1 {
