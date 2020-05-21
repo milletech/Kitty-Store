@@ -282,7 +282,7 @@ html {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   text-align: center;
-  z-index: 10;
+  z-index: 15;
   -webkit-transition: display 2s;
   transition: display 2s;
 }
@@ -425,7 +425,38 @@ html {
   background-color: #fff;
 }
 
+.header .navbar .counter-holder {
+  position: relative;
+}
+
+.header .navbar .counter-holder .main-counter {
+  font-size: 15px;
+  position: absolute;
+  background-color: #f4f4f4;
+  padding: 9px;
+  border-radius: 6px;
+  top: -10%;
+  right: -7%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  z-index: 2;
+  display: none;
+  color: #555;
+}
+
 .header .navbar__cart-icon {
+  z-index: 1;
   height: 4rem;
   width: 4rem;
   cursor: pointer;
@@ -574,6 +605,7 @@ html {
 }
 
 .product-area {
+  z-index: 1;
   -ms-grid-column-align: self-start;
       justify-self: self-start;
   display: -ms-grid;
@@ -594,6 +626,37 @@ html {
     -ms-grid-columns: (auto)[2];
         grid-template-columns: repeat(2, auto);
   }
+}
+
+.product-area .product-card {
+  position: relative;
+}
+
+.product-area .product-card .product-overlay {
+  -webkit-transition: height .2s;
+  transition: height .2s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(244, 244, 244, 0.75);
+  width: 100%;
+  height: 0%;
+}
+
+.product-area .product-card .product-overlay .checkout-info {
+  display: none;
+  cursor: pointer;
+  text-align: center;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.product-area .product-card .product-overlay .checkout-info h3 {
+  font-size: 2rem;
+  color: #1e90d3ff;
 }
 
 .product-area .product-card__imagebox {
@@ -775,6 +838,7 @@ html {
 
 .checkout {
   overflow-y: scroll;
+  z-index: 20;
 }
 
 .check-header {
@@ -838,7 +902,7 @@ html {
 
 .checkout-cost button {
   cursor: pointer;
-  background-color: steelblue;
+  background-color: #1e90d3ff;
   border: none;
   color: #f4f4f4;
   font-size: 2rem;

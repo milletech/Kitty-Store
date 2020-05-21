@@ -89,14 +89,20 @@ var BtnController = (function(UICtrl) {
 ====DATA STRUCTURE=====
 
 3.Remove from the cart btn==>In 2 ways remove the cart from the cart itself and the an item
+removing the item from the cart===>remove the item from the data structure,then remove item from the UI 
+
+//Removing the item from the data structure
+use the splice method, every item need to have a unique id
 
 4.Update the UI
 ===>Add an checkout overlay in the product
 ===>Change the plus icon to minus icon
 ===>Cart items
+===>Alert whether we added or removed an array from the cart
 */
-
+// 3d scaning technology is needed, we need engineers, to build a platform
 // THE DATA STRUCTURE
+// The technology is needed
 
 
 var dataController = (function() {
@@ -118,7 +124,10 @@ var UIController = (function() {
         addItem: "product-card__add",
         cartDOM: ".cartItems",
         counter: ".counter",
-        totalCost: ".total-cost"
+        cartCounter: ".main-counter",
+        totalCost: ".total-cost",
+        productOverlay: ".product-overlay",
+        checkoutInfo: "checkout-info"
     }
 
     return {
@@ -148,10 +157,15 @@ var UIController = (function() {
 var controller = (function(UICtrl) {
     var strings = UICtrl.getDOMStrings();
     var addIcon = document.getElementsByClassName(strings.addItem);
-    var counter = 0;
-    var total = 0;
+
+    // DATA STRUCTURE
+    var data = {
+        products: [],
+        allPrices: []
+    };
     for (x of addIcon) {
         x.addEventListener("click", function() {
+
             var ProductInfo = function(proName, proPrice, proImage, numPrice) {
                 this.proName = proName;
                 this.proPrice = proPrice;
@@ -162,35 +176,52 @@ var controller = (function(UICtrl) {
             var productPrice = (this.parentElement.firstChild.nextElementSibling.lastChild.previousElementSibling.innerHTML);
             var newPrice = Number(productPrice.slice(1));
             var productImage = this.parentElement.parentElement.firstChild.nextElementSibling.firstChild.nextElementSibling.src;
-            // DATA STRUCTURE
-            var data = {
-                products: [],
-                allPrices: []
-            };
+            var overlay = this.parentElement.nextElementSibling;
+            var overlayIcon = overlay.firstChild.nextElementSibling;
             // CREATE  NEW ITEM
             var newItem = new ProductInfo(productName, productPrice, productImage, newPrice);
             data.products.push(newItem);
             data.allPrices.push(newItem.numPrice);
-            dataController.createItem();
+
             // ADD TO CART
             UICtrl.addItem(newItem);
+
             // UPDATE UI
-            counter++;
-            document.querySelector(strings.counter).innerHTML = counter;
-            // UPDATE THE TOATAL COST OF THE ITEMS
-            total += parseFloat(data.allPrices);
+            //counter++;
+            document.querySelector(strings.counter).innerHTML = data.products.length;
+
+            if (data.products.length > 0) {
+                document.querySelector(strings.cartCounter).style.display = "flex";
+                document.querySelector(strings.cartCounter).innerHTML = data.products.length;
+            }
+
+            // Open the overlay
+            overlay.style.height = "84%";
+            overlayIcon.style.display = "block";
+
+            // UPDATE THE TOTAL COST OF THE ITEMS
+            var total = 0;
+            var prices = data.allPrices;
+            prices.forEach(function(curr) {
+                total += parseFloat(curr);
+            });
             document.querySelector(strings.totalCost).innerHTML = total;
-
-
-
         })
     }
     // OPEN CART
-    document.querySelector(strings.cartBtn).addEventListener("click", function() {
-        document.querySelector(strings.cartSheet).style.width = "20%";
-    });
+    function openCart() {
+        document.querySelector(strings.cartSheet).style.width = "25%";
+    }
+    document.querySelector(strings.cartBtn).addEventListener("click", openCart);
+    for (y of document.getElementsByClassName(strings.checkoutInfo)) {
+        y.addEventListener("click", openCart)
+    };
     // CLOSE CART
     document.querySelector(strings.cartAbort).addEventListener("click", function() {
         document.querySelector(strings.cartSheet).style.width = "0%";
     })
-})(UIController)
+})(UIController);
+
+
+// Data structure, removing an element from the data structure then updating the UI
+// I need this knowledge

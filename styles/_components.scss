@@ -102,7 +102,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
-        z-index: 10;
+        z-index: 15;
         transition: display 2s;
     }
     &__item {
@@ -207,7 +207,29 @@
                 }
             }
         }
+        .counter-holder {
+            position: relative;
+            .main-counter {
+                font-size: 15px;
+                position: absolute;
+                background-color: #f4f4f4;
+                padding: 9px;
+                border-radius: 6px;
+                top: -10%;
+                right: -7%;
+                transform: translateX(-50%);
+                width: 1.5rem;
+                height: 1.5rem;
+                justify-content: center;
+                display: flex;
+                align-items: center;
+                z-index: 2;
+                display: none;
+                color: $Text-color;
+            }
+        }
         &__cart-icon {
+            z-index: 1;
             height: 4rem;
             width: 4rem;
             cursor: pointer;
@@ -324,6 +346,7 @@
 
 .product-area {
     //grid-column:col-start 3/col-end 9;
+    z-index: 1;
     justify-self: self-start;
     display: grid;
     grid-template-columns: repeat(3, auto);
@@ -335,6 +358,30 @@
         grid-template-columns: repeat(2, auto);
     }
     .product-card {
+        position: relative;
+        .product-overlay {
+            transition: height .2s;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(244, 244, 244, 0.75);
+            width: 100%;
+            height: 0%;
+            .checkout-info {
+                display: none;
+                cursor: pointer;
+                text-align: center;
+                position: absolute;
+                top: 60%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                h3 {
+                    font-size: 2rem;
+                    color: #1e90d3ff;
+                    // font-weight: 700;
+                }
+            }
+        }
         &__imagebox {
             border: solid 1px $secondary-color;
         }
@@ -485,6 +532,7 @@
 // The cart
 .checkout {
     overflow-y: scroll;
+    z-index: 20;
 }
 
 .check-header {
@@ -535,7 +583,7 @@
     }
     button {
         cursor: pointer;
-        background-color: steelblue;
+        background-color: #1e90d3ff;
         border: none;
         color: #f4f4f4;
         font-size: 2rem;
