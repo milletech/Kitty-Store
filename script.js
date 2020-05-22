@@ -128,7 +128,7 @@ var UIController = (function() {
         cartCounter: ".main-counter",
         totalCost: ".total-cost",
         productOverlay: ".product-overlay",
-        checkoutInfo: "checkout-info"
+        checkoutInfo: "checkout-info",
     }
 
     return {
@@ -164,6 +164,15 @@ var controller = (function(UICtrl) {
         products: [],
         allPrices: []
     };
+    var updateTotalCost = function() {
+        var total = 0;
+        var prices = data.allPrices;
+        prices.forEach(function(curr) {
+            total += parseFloat(curr);
+        });
+        document.querySelector(strings.totalCost).innerHTML = total;
+    };
+    // Add Item
     for (x of addIcon) {
         x.addEventListener("click", function() {
 
@@ -211,14 +220,46 @@ var controller = (function(UICtrl) {
             overlayIcon.style.display = "block";
 
             // UPDATE THE TOTAL COST OF THE ITEMS
-            var total = 0;
-            var prices = data.allPrices;
-            prices.forEach(function(curr) {
-                total += parseFloat(curr);
-            });
-            document.querySelector(strings.totalCost).innerHTML = total;
+            updateTotalCost()
+
         })
     }
+    // Remove item
+    document.querySelector(strings.cartDOM).addEventListener("click", function(event) {
+        var itemID, splitID, ID, index;
+
+        itemID = event.target.parentNode.parentNode.id;
+        splitID = itemID.split("-");
+        ID = parseFloat(splitID[1]);
+        //1. delete an item from the data structure
+        // Return an array
+        var ids = data.products.map(function(current) {
+            return current.id;
+        });
+        index = ids.indexOf(ID);
+        if (index !== -1) {
+            data.products.splice(index, 1);
+            data.allPrices.splice(index, 1);
+        }
+        console.log(data);
+        //2. delete an item from the UI
+        var el = document.getElementById(itemID);
+        el.parentNode.removeChild(el);
+        //3. update the total cost
+        updateTotalCost();
+        //4. update the counter(number of items in the cart)
+        document.querySelector(strings.counter).innerHTML = data.products.length;
+        //5. Update cart counter
+        if (data.products.length < 1) {
+            document.querySelector(strings.cartCounter).style.display = "none";
+        } else {
+            document.querySelector(strings.cartCounter).innerHTML = data.products.length;
+        }
+        //6. remove the cart icon from the product card
+
+
+
+    });
     // OPEN CART
     function openCart() {
         document.querySelector(strings.cartSheet).style.width = "25%";
