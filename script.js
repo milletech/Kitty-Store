@@ -80,6 +80,7 @@ var BtnController = (function(UICtrl) {
     :image of the product,
     :price of the product
 }
+// Creating an item, every item needs to have a unique ID
 ===>function constructor
 ===>Store the object in the allItems array==>Product Counter
 
@@ -133,11 +134,11 @@ var UIController = (function() {
     return {
         addItem: function(obj) {
             var html, newHtml;
-            counter = 0;
-            html = '<div class="product-cart"><img src="%imagesrc%" alt="" class="cartImg"><div class="product-cart-desc"><h1>%productName%</h1><h1>%productPrice%</h1><i>Remove</i></div></div>';
+            html = '<div class="product-cart" id="product-%id%"><img src="%imagesrc%" alt="" class="cartImg"><div class="product-cart-desc"><h1>%productName%</h1><h1>%productPrice%</h1><i>Remove</i></div></div>';
             newHtml = html.replace("%imagesrc%", obj.proImage);
             newHtml = newHtml.replace("%productName%", obj.proName);
             newHtml = newHtml.replace("%productPrice%", obj.proPrice);
+            newHtml = newHtml.replace("%id%", obj.id);
 
             //Insert the item to the cart DOM
             document.querySelector(DOMStrings.cartDOM).insertAdjacentHTML("afterbegin", newHtml);
@@ -166,11 +167,12 @@ var controller = (function(UICtrl) {
     for (x of addIcon) {
         x.addEventListener("click", function() {
 
-            var ProductInfo = function(proName, proPrice, proImage, numPrice) {
+            var ProductInfo = function(proName, proPrice, proImage, numPrice, id) {
                 this.proName = proName;
                 this.proPrice = proPrice;
                 this.proImage = proImage;
                 this.numPrice = numPrice;
+                this.id = id
             };
             var productName = this.parentElement.firstChild.nextElementSibling.firstChild.nextElementSibling.innerHTML;
             var productPrice = (this.parentElement.firstChild.nextElementSibling.lastChild.previousElementSibling.innerHTML);
@@ -179,20 +181,29 @@ var controller = (function(UICtrl) {
             var overlay = this.parentElement.nextElementSibling;
             var overlayIcon = overlay.firstChild.nextElementSibling;
             // CREATE  NEW ITEM
-            var newItem = new ProductInfo(productName, productPrice, productImage, newPrice);
+            var ID;
+            if (data.products.length > 0) {
+                ID = data.products[data.products.length - 1].id + 1;
+            } else {
+                ID = 0;
+            }
+            var newItem = new ProductInfo(productName, productPrice, productImage, newPrice, ID);
             data.products.push(newItem);
             data.allPrices.push(newItem.numPrice);
+            console.log(data);
 
             // ADD TO CART
             UICtrl.addItem(newItem);
 
             // UPDATE UI
-            //counter++;
             document.querySelector(strings.counter).innerHTML = data.products.length;
 
-            if (data.products.length > 0) {
+            if (data.products.length > 0 && data.products.length < 10) {
                 document.querySelector(strings.cartCounter).style.display = "flex";
                 document.querySelector(strings.cartCounter).innerHTML = data.products.length;
+            } else if (data.products.length >= 10) {
+                document.querySelector(strings.cartCounter).style.display = "flex";
+                document.querySelector(strings.cartCounter).innerHTML = 9 + "+";
             }
 
             // Open the overlay
@@ -217,9 +228,10 @@ var controller = (function(UICtrl) {
         y.addEventListener("click", openCart)
     };
     // CLOSE CART
-    document.querySelector(strings.cartAbort).addEventListener("click", function() {
+    function closeCart() {
         document.querySelector(strings.cartSheet).style.width = "0%";
-    })
+    };
+    document.querySelector(strings.cartAbort).addEventListener("click", closeCart);
 })(UIController);
 
 
